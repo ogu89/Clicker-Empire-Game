@@ -13,8 +13,8 @@ You can save your progress at anytime in the game. When you want to log back in,
 
 DO NOT TYPE NAME "Millionaire" 
 ### Screenshot
-<img alt="1 screenshot" src="screenshots/Screen Shot 2021-09-18 at 5.31.29 pm.png" width=50%>
-<img alt="1 screenshot" src="screenshots/Main.png" width=50%>
+<img alt="1 screenshot" src="screenshots/Screen Shot 2021-09-18 at 5.31.29 pm.png" width=50%><img alt="1 screenshot" src="screenshots/Main.png" width=50%>
+
 
 ### URL
 <a href="https://ogu89.github.io/Battery-Finder-Program/">https://ogu89.github.io/Clicker-Empire-Game/</a>
