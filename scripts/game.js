@@ -1,5 +1,3 @@
-
-
 class Item{
     constructor(name, type, maxpurchases, price, profit, quantity, imageUrl){
         this.name = name;
@@ -16,19 +14,14 @@ class Item{
         this.quantity += boughtQty;
     }
 
+    //ETF Stockの価格増加
     increaseStockPrice(){
-
         this.price =Math.floor(this.price * (1+ 0.1) * 10)/10 ;
-  
     }
 
 
 
 };
-
-
-
-
 
 
 
@@ -46,7 +39,6 @@ class User{
         this.day ++;
         if(this.day % 366 == 0) this.age++;
         return this.day;
-
     }
 
     clickBurger(clickProfit){
@@ -59,23 +51,13 @@ class User{
         this.money -= price;
     }
 
+    //毎秒獲得金額によるUser所持金上昇
     getMoneyPerSec(profit){
-
         //console.log(profit)
-
-        
-        this.money =     Math.floor((this.money + profit) * 100) /100;
-        
+        this.money =  Math.floor((this.money + profit) * 100) /100;
     }
 
-
-    
-
-    
-
-    
-
-    
+ 
 
     
 }
@@ -107,8 +89,6 @@ class View{
             </div>
         `;
 
-        
-
         return container;
         
     }
@@ -132,6 +112,7 @@ class View{
 	    </div>
         `;
 
+        //config追加
         Controller.config.leftMain = container.querySelectorAll("#leftMain")[0];
         Controller.config.userInfo = container.querySelectorAll("#userInfo")[0];
         Controller.config.itemSelection = container.querySelectorAll("#itemSelection")[0];
@@ -198,7 +179,7 @@ class View{
 
     static userInfomation(userAccount){
         let container = document.createElement("div");
-        //container.classList.add("d-flex", "flex-column", "align-items-center", "bg-dark", "py-2", "mb-5", "text-center", "text-white");
+
 
         container.innerHTML = 
         `
@@ -223,11 +204,10 @@ class View{
         `;
 
         return container;
-        
-                        
-                        
-                    
+                 
     }
+
+
 
     static itemSelector(userAccount){
         let container = document.createElement("div");
@@ -270,12 +250,15 @@ class View{
         }   
 
         return container;
-        
     }
 
+
+
+    //アイテム詳細ページ
     static itemDetail(itemObject, userAccount){
         let container = document.createElement("div");
         let itemDescription = itemObject.type == "Skill" ? `Get $${itemObject.profit} /click` : itemObject.type == "Real estate" ? `Get $${itemObject.profit} /sec` : `Add up all ${itemObject.name} purchases and get ${itemObject.profit}% per second.`;
+        
 
         container.innerHTML =
         `
@@ -312,6 +295,7 @@ class View{
         let purchaseQty = container.querySelectorAll("#inputQuantity")[0];
         let totalPrice = container.querySelectorAll("#total-price")[0];
 
+        
 
         purchaseQty.addEventListener("change", function(){
             totalPrice.value = itemObject.price * purchaseQty.value;
@@ -327,16 +311,18 @@ class View{
 
         let purchaseBtn = container.querySelectorAll(".purchase-btn")[0];
         purchaseBtn.addEventListener("click", function(){
-            console.log(typeof totalPrice.value)
-            if(parseInt(purchaseQty.value)  == 0) alert("Invalid Number");
+            //購入スクリーニング
+            let purchaseQtyValue = parseInt(purchaseQty.value);
+            if(purchaseQtyValue  == 0) alert("Invalid Number");
             else if(totalPrice.value > userAccount.money) alert("You don't have enough money.");
+            else if(itemObject.maxpurchases < itemObject.quantity + purchaseQtyValue && itemObject.type != "Investment"){
+                alert("You can't buy this item anymore");
+            } 
             else Controller.buyItem(userAccount, itemObject, parseInt(purchaseQty.value));
         })
 
 
         return container;
-
-
 
     }
 
@@ -370,26 +356,22 @@ class View{
             Controller.saveGameData(userAccount);
         })
         
-
-
         return container;
 
         
     }
 
-    
-
-
-
 }
+
+
 
 
 class Controller{
     
     static itemList = [
         new Item("Flip machine", "Skill", 500, 150, 0.25, 0, "https://cdn-icons-png.flaticon.com/512/823/823215.png"),
-        new Item("ETF Stock", "Investment", 0, 3000, 0.1, 0, "https://cdn-icons-png.flaticon.com/512/2910/2910311.png"),
-        new Item("ETF Bonds", "Investment", 0, 3000, 0.07, 0, "https://cdn-icons-png.flaticon.com/512/2910/2910257.png" ),
+        new Item("ETF Stock", "Investment", "∞", 3000, 0.1, 0, "https://cdn-icons-png.flaticon.com/512/2910/2910311.png"),
+        new Item("ETF Bonds", "Investment", "∞", 3000, 0.07, 0, "https://cdn-icons-png.flaticon.com/512/2910/2910257.png" ),
         new Item("Lemonade Stand", "Real estate", 1000, 300, 0.3, 0, "https://cdn-icons-png.flaticon.com/512/941/941769.png"),
         new Item("Ice Cream Truck", "Real estate", 500, 1000, 1.2, 0, "https://cdn-icons-png.flaticon.com/512/3217/3217048.png"),
         new Item("House", "Real estate", 100, 200000, 320, 0, "https://cdn-icons-png.flaticon.com/512/2413/2413469.png"),
@@ -411,13 +393,14 @@ class Controller{
 
     
 
-
+    //最初のボタンチェック
     static checkButton(){
         let clickcedButton = document.activeElement['value'];
         const inputName = document.getElementById("name-form").querySelectorAll(`input[name="userName"]`)[0].value;
         if (clickcedButton == "new") Controller.initializeUserAccount(inputName);
         if(clickcedButton == "load") Controller.loadGameData(inputName);
     }
+
 
     static initializeApp (){
         
@@ -431,24 +414,10 @@ class Controller{
         `;
 
 
-        /*
-
-        <div id="main" class="d-flex justify-content-center col-12  background py-3">
-	            <div class="d-flex row px-2">
-		            <div id="leftMain" class="col-sm-5 bg-dark py-3"></div>
-
-		            <div class="col-sm-7 d-flex flex-column">
-			            <div id="userInfo" ></div>
-			            <div id="itemSelection"></div>
-			            <div id="saveLoad"></div>
-		            </div>
-	            </div>
-            </div> 
-        */
-
         Controller.config = {
             page : document.getElementById("page")
             /*
+            config追加分
             Controller.config.leftMain = container.querySelectorAll("#leftMain")[0];
             Controller.config.userInfo = container.querySelectorAll("#userInfo")[0];
             Controller.config.itemSelection = container.querySelectorAll("#itemSelection")[0];
@@ -456,47 +425,40 @@ class Controller{
             */
         }
         
-
-
         Controller.config.page.append(View.makeNameForm())
-        
-        
-
         
     }
 
+    //ユーザー情報
     static initializeUserAccount(name){
-        
+        let defaultMoneyValue = name === "Millionaire" ? 1000000 : 500;
         let userAccount = new User(
             name,
             20,
             0,
-            500,
+            defaultMoneyValue,
             0,
             Controller.itemList
         );
         
 
         Controller.changeMainPage(View.mainPage(userAccount))
-        
-
         Controller.initializeTimeCount(userAccount);
-    
-        
         
     }
 
+    //毎秒ごとの更新開始
     static initializeTimeCount(userAccount){
         Controller.interval = setInterval(function(){
             
             userAccount.daysPass();
-            //Controller.calculateProfitPerSec(userAccount);
+            Controller.calculateProfitPerSec(userAccount);
             Controller.updateUserInfoView(userAccount);
-            Controller.updateLeftMainView(userAccount, Controller.calculateProfitPerSec(userAccount));  
+            //Controller.updateLeftMainView(userAccount, Controller.calculateProfitPerSec(userAccount));  
         },1000)
     }
 
-
+    //購入アイテムから毎秒獲得金額の計算
     static calculateProfitPerSec(userAccount){
         let totalProfit = 0;
         Controller.itemList.forEach(item => {
@@ -510,10 +472,11 @@ class Controller{
         });
         totalProfit = Math.ceil(totalProfit * 100)/100
         userAccount.getMoneyPerSec(totalProfit);
-        console.log(totalProfit);
+        //console.log(totalProfit);
         return totalProfit
         
     }
+
 
     static buyItem(userAccount, itemObject, qty){
         userAccount.payMoney(itemObject.price * qty);
@@ -524,8 +487,8 @@ class Controller{
         }
         Controller.updateLeftMainView(userAccount, Controller.calculateProfitPerSec(userAccount));
         Controller.updateItemSelectionView(userAccount);
-
     }
+
     static changeMainPage(container){
         Controller.config.page.innerHTML = "";
         Controller.config.page.append(container);
@@ -546,6 +509,7 @@ class Controller{
         Controller.config.itemSelection.append(View.itemSelector(userAccount));
     }
 
+    //データリセット
     static resetGameData(userAccount){
         clearInterval(Controller.interval);
         Controller.itemList.map(item=>{
@@ -556,6 +520,7 @@ class Controller{
         
     }
 
+    //セーブ　json
     static saveGameData(userAccount){
         localStorage.removeItem(`${userAccount.name}`);
         let saveObject = userAccount;
@@ -568,6 +533,7 @@ class Controller{
         
     }
 
+    //ロードゲーム
     static loadGameData(name){
         
         //console.log(localStorage.getItem(inputName))
@@ -589,27 +555,10 @@ class Controller{
             );
             //console.log(savedUserAccount);
             Controller.changeMainPage(View.mainPage(savedUserAccount))
-  
             Controller.initializeTimeCount(savedUserAccount);
-            
         } 
         
     }
-    
-
-
-    
-    
-    
-    
-
-    
-
-    
-
-
-    
-    
     
 
 }
