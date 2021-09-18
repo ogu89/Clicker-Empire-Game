@@ -471,7 +471,7 @@ class Controller{
             name,
             20,
             0,
-            50000,
+            500,
             0,
             Controller.itemList
         );
