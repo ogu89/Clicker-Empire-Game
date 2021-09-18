@@ -18,10 +18,8 @@ class Item{
     increaseStockPrice(){
         this.price =Math.floor(this.price * (1+ 0.1) * 10)/10 ;
     }
+}
 
-
-
-};
 
 
 
@@ -57,8 +55,6 @@ class User{
         this.money =  Math.floor((this.money + profit) * 100) /100;
     }
 
- 
-
     
 }
 
@@ -89,8 +85,7 @@ class View{
             </div>
         `;
 
-        return container;
-        
+        return container;   
     }
 
 
@@ -119,8 +114,7 @@ class View{
         Controller.config.saveLoad = container.querySelectorAll("#saveLoad")[0];
 
         
-        
-
+ 
 
         Controller.config.leftMain.append(View.leftMainPage(userAccount, Controller.calculateProfitPerSec(userAccount)));
         Controller.config.userInfo.append(View.userInfomation(userAccount));
@@ -128,22 +122,10 @@ class View{
         Controller.config.saveLoad.append(View.saveLoadBtn(userAccount));
 
 
-
-
-
-
-
-
-
         return container;
-
-       
-        
-
-
-
-        
     }
+
+
 
     static leftMainPage(userAccount, totalPerSec){
         let container = document.createElement("div");
@@ -177,9 +159,10 @@ class View{
 
     }
 
+
+
     static userInfomation(userAccount){
         let container = document.createElement("div");
-
 
         container.innerHTML = 
         `
@@ -203,8 +186,7 @@ class View{
         </div>
         `;
 
-        return container;
-                 
+        return container; 
     }
 
 
@@ -321,7 +303,6 @@ class View{
             else Controller.buyItem(userAccount, itemObject, parseInt(purchaseQty.value));
         })
 
-
         return container;
 
     }
@@ -387,12 +368,9 @@ class Controller{
     static ETFStockTotal = 0;
     static interval = null;
 
-    
-
     static config;
 
     
-
     //最初のボタンチェック
     static checkButton(){
         let clickcedButton = document.activeElement['value'];
@@ -400,6 +378,7 @@ class Controller{
         if (clickcedButton == "new") Controller.initializeUserAccount(inputName);
         if(clickcedButton == "load") Controller.loadGameData(inputName);
     }
+
 
 
     static initializeApp (){
@@ -426,12 +405,13 @@ class Controller{
         }
         
         Controller.config.page.append(View.makeNameForm())
-        
     }
+
+
 
     //ユーザー情報
     static initializeUserAccount(name){
-        let defaultMoneyValue = name === "Millionaire" ? 1000000 : 500;
+        let defaultMoneyValue = name === "Millionaire" ?  1000000: 500;
         let userAccount = new User(
             name,
             20,
@@ -447,6 +427,7 @@ class Controller{
         
     }
 
+
     //毎秒ごとの更新開始
     static initializeTimeCount(userAccount){
         Controller.interval = setInterval(function(){
@@ -457,6 +438,7 @@ class Controller{
             //Controller.updateLeftMainView(userAccount, Controller.calculateProfitPerSec(userAccount));  
         },1000)
     }
+
 
     //購入アイテムから毎秒獲得金額の計算
     static calculateProfitPerSec(userAccount){
@@ -474,7 +456,6 @@ class Controller{
         userAccount.getMoneyPerSec(totalProfit);
         //console.log(totalProfit);
         return totalProfit
-        
     }
 
 
@@ -489,6 +470,7 @@ class Controller{
         Controller.updateItemSelectionView(userAccount);
     }
 
+    //ページ更新類
     static changeMainPage(container){
         Controller.config.page.innerHTML = "";
         Controller.config.page.append(container);
@@ -509,6 +491,7 @@ class Controller{
         Controller.config.itemSelection.append(View.itemSelector(userAccount));
     }
 
+
     //データリセット
     static resetGameData(userAccount){
         clearInterval(Controller.interval);
@@ -520,7 +503,7 @@ class Controller{
         
     }
 
-    //セーブ　json
+    //セーブ　JSON
     static saveGameData(userAccount){
         localStorage.removeItem(`${userAccount.name}`);
         let saveObject = userAccount;
@@ -536,7 +519,7 @@ class Controller{
     //ロードゲーム
     static loadGameData(name){
         
-        //console.log(localStorage.getItem(inputName))
+        //console.log(localStorage.getItem(name))
         if(! localStorage.getItem(name)) alert("There is no data");
         else{
             let myLocalStrage = localStorage.getItem(name);
