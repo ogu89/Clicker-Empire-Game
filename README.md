@@ -11,7 +11,7 @@ The user begins the game at 20 years old and as a hamburger flipping job at a fa
 You can earn $0.25 every time you click the hamburger. Users can save money to upgrade, invest, or buy real estate.
 You can save your progress at anytime in the game. When you want to log back in, type the same name in the form and click "Load Game".
 
-DO NOT TYPE NAME "Millionaire" 
+DO NOT TYPE NAME "Millionaire"!!!
 ### Screenshot
 <img alt="1 screenshot" src="screenshots/Screen Shot 2021-09-18 at 5.31.29 pm.png" width=70%>
 <img alt="1 screenshot" src="screenshots/Main.png" width=70%>
