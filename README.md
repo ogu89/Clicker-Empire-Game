@@ -10,6 +10,8 @@ To start game, type your name and click "New Game".
 The user begins the game at 20 years old and as a hamburger flipping job at a fast food restaurant. One day passes every second.
 You can earn $0.25 every time you click the hamburger. Users can save money to upgrade, invest, or buy real estate.
 You can save your progress at anytime in the game. When you want to log back in, type the same name in the form and click "Load Game".
+
+DO NOT TYPE NAME"Millionaire" 
 ### Screenshot
 
 
